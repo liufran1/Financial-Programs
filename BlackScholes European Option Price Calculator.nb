@@ -1,0 +1,290 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     11162,        281]
+NotebookOptionsPosition[     10841,        265]
+NotebookOutlinePosition[     11188,        280]
+CellTagsIndexPosition[     11145,        277]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"D1", "[", 
+   RowBox[{
+   "V_", ",", "T_", ",", "t_", ",", "StockPrice_", ",", "StrikePrice_", ",", 
+    "InterestRate_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"1", "/", 
+    RowBox[{"(", 
+     RowBox[{"V", "*", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"T", "-", "t"}], ")"}], "^", ".5"}]}], ")"}]}], "*", 
+   RowBox[{"(", 
+    RowBox[{
+     RowBox[{"Log", "[", 
+      RowBox[{"StockPrice", "/", "StrikePrice"}], "]"}], "+", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"InterestRate", "+", 
+        RowBox[{"0.5", "*", 
+         RowBox[{"V", "^", "2"}]}]}], ")"}], "*", 
+      RowBox[{"(", 
+       RowBox[{"T", "-", "t"}], ")"}]}]}], ")"}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"D2", "[", 
+   RowBox[{
+   "Volatility_", ",", "T_", ",", "t_", ",", "StockPrice_", ",", 
+    "StrikePrice_", ",", "InterestRate_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"D1", "[", 
+    RowBox[{
+    "Volatility", ",", "T", ",", "t", ",", "StockPrice", ",", "StrikePrice", 
+     ",", "InterestRate"}], "]"}], "-", 
+   RowBox[{"Volatility", "*", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"T", "-", "t"}], ")"}], "^", 
+     ".5"}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EuropeanCallF", "[", 
+   RowBox[{
+   "Volatility_", ",", "T_", ",", "t_", ",", "StockPrice_", ",", 
+    "StrikePrice_", ",", "InterestRate_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"CDF", "[", 
+     RowBox[{
+      RowBox[{"NormalDistribution", "[", "]"}], ",", 
+      RowBox[{"D1", "[", 
+       RowBox[{
+       "Volatility", ",", "T", ",", "t", ",", "StockPrice", ",", 
+        "StrikePrice", ",", "InterestRate"}], "]"}]}], "]"}], "*", 
+    "StockPrice"}], "-", 
+   RowBox[{"StrikePrice", "*", 
+    RowBox[{"CDF", "[", 
+     RowBox[{
+      RowBox[{"NormalDistribution", "[", "]"}], ",", 
+      RowBox[{"D2", "[", 
+       RowBox[{
+       "Volatility", ",", "T", ",", "t", ",", "StockPrice", ",", 
+        "StrikePrice", ",", "InterestRate"}], "]"}]}], "]"}], "*", 
+    RowBox[{"E", "^", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "InterestRate"}], "*", 
+       RowBox[{"(", 
+        RowBox[{"T", "-", "t"}], ")"}]}], 
+      ")"}]}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"EuropeanPutF", "[", 
+   RowBox[{
+   "Volatility_", ",", "T_", ",", "t_", ",", "StockPrice_", ",", 
+    "StrikePrice_", ",", "InterestRate_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"EuropeanCallF", "[", 
+    RowBox[{
+    "Volatility", ",", "T", ",", "t", ",", "StockPrice", ",", "StrikePrice", 
+     ",", "InterestRate"}], "]"}], "-", "StockPrice", "+", 
+   RowBox[{"StrikePrice", "*", 
+    RowBox[{"E", "^", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "InterestRate"}], "*", "T"}], 
+      ")"}]}]}]}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ECallDeltaF", "[", 
+    RowBox[{
+    "Volatility_", ",", "T_", ",", "t_", ",", "StockPrice_", ",", 
+     "StrikePrice_", ",", "InterestRate_"}], "]"}], ":=", 
+   RowBox[{"CDF", "[", 
+    RowBox[{
+     RowBox[{"NormalDistribution", "[", "]"}], ",", 
+     RowBox[{"D1", "[", 
+      RowBox[{
+      "Volatility", ",", "T", ",", "t", ",", "StockPrice", ",", "StrikePrice",
+        ",", "InterestRate"}], "]"}]}], "]"}]}], "\[IndentingNewLine]", 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{"Manipulate", "[", 
+  RowBox[{
+   RowBox[{"Grid", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\"\<European Call\>\"", ",", 
+         RowBox[{"Evaluate", "[", 
+          RowBox[{"EuropeanCallF", "[", 
+           RowBox[{
+           "Volatility", ",", "T", ",", "t", ",", "StockPrice", ",", 
+            "StrikePrice", ",", "InterestRate"}], "]"}], "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<European Put\>\"", ",", 
+         RowBox[{"Evaluate", "[", 
+          RowBox[{"EuropeanPutF", "[", 
+           RowBox[{
+           "Volatility", ",", "T", ",", "t", ",", "StockPrice", ",", 
+            "StrikePrice", ",", "InterestRate"}], "]"}], "]"}]}], "}"}], 
+       "\[IndentingNewLine]", ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<Delta of European Call\>\"", ",", 
+         RowBox[{"ecall", "=", 
+          RowBox[{"Evaluate", "[", 
+           RowBox[{"ECallDeltaF", "[", 
+            RowBox[{
+            "Volatility", ",", "T", ",", "t", ",", "StockPrice", ",", 
+             "StrikePrice", ",", "InterestRate"}], "]"}], "]"}]}]}], "}"}], 
+       ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<Delta of European Put\>\"", ",", 
+         RowBox[{"ecall", "-", "1"}]}], "}"}]}], "}"}], ",", 
+     RowBox[{"Alignment", "\[Rule]", "Left"}]}], "]"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"StockPrice", ",", "100", ",", "\"\<Stock Price\>\""}], "}"}], 
+    "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"StrikePrice", ",", "100", ",", " ", "\"\<Strike Price\>\""}], 
+     "}"}], "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"InterestRate", ",", ".05", ",", " ", "\"\<Interest Rate\>\""}], 
+     "}"}], "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"T", ",", ".25", ",", "\"\<Maturity Period\>\""}], "}"}], "}"}], 
+   ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"t", ",", "0", ",", "\"\<Current Period\>\""}], "}"}], "}"}], 
+   ",", "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"Volatility", ",", ".25", ",", "\"\<Volatility\>\""}], "}"}], 
+    "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{"BaseStyle", "\[Rule]", 
+    RowBox[{"FontSize", "\[Rule]", "16"}]}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.657979144387558*^9, 3.657979144387558*^9}, {
+   3.6579793238308406`*^9, 3.657979351759574*^9}, {3.6579793885625515`*^9, 
+   3.6579794349755516`*^9}, {3.657979476484552*^9, 3.657979534731552*^9}, {
+   3.6579796532010517`*^9, 3.657979658553052*^9}, {3.6579796919340515`*^9, 
+   3.657979708822052*^9}, {3.6579797436110516`*^9, 3.657979932035552*^9}, {
+   3.657979972209552*^9, 3.657980119388152*^9}, {3.6579801612737517`*^9, 
+   3.657980178216552*^9}, {3.6579805245144596`*^9, 3.6579805404947453`*^9}, 
+   3.657980584691169*^9, {3.6579807363713255`*^9, 3.657981040771532*^9}, {
+   3.6579811149413557`*^9, 3.65798116749802*^9}, 3.657981276728332*^9, 
+   3.6579813287056017`*^9, {3.6579814014883733`*^9, 3.6579814197687745`*^9}, {
+   3.6579814961357145`*^9, 3.657981508065035*^9}, {3.6579819620940065`*^9, 
+   3.6579819946320066`*^9}, {3.657982042520007*^9, 3.657982050817007*^9}, {
+   3.6579823027900066`*^9, 3.6579823208230066`*^9}, {3.6579824087160068`*^9, 
+   3.6579824238391657`*^9}, {3.6579824930728784`*^9, 3.6579825368235083`*^9}, 
+   3.657982622129983*^9, {3.657982734887952*^9, 3.6579827353569517`*^9}, {
+   3.657982850465952*^9, 3.6579828900149517`*^9}},
+ Background->RGBColor[0.88, 1, 0.88]],
+
+Cell[BoxData[
+ TagBox[
+  StyleBox[
+   DynamicModuleBox[{$CellContext`InterestRate$$ = 
+    0.05, $CellContext`StockPrice$$ = 100, $CellContext`StrikePrice$$ = 
+    100, $CellContext`t$$ = 0, $CellContext`T$$ = 
+    0.25, $CellContext`Volatility$$ = 0.25, Typeset`show$$ = True, 
+    Typeset`bookmarkList$$ = {}, Typeset`bookmarkMode$$ = "Menu", 
+    Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
+    "\"untitled\"", Typeset`specs$$ = {{{
+       Hold[$CellContext`StockPrice$$], 100, "Stock Price"}}, {{
+       Hold[$CellContext`StrikePrice$$], 100, "Strike Price"}}, {{
+       Hold[$CellContext`InterestRate$$], 0.05, "Interest Rate"}}, {{
+       Hold[$CellContext`T$$], 0.25, "Maturity Period"}}, {{
+       Hold[$CellContext`t$$], 0, "Current Period"}}, {{
+       Hold[$CellContext`Volatility$$], 0.25, "Volatility"}}}, 
+    Typeset`size$$ = {322., {31.5, 38.5}}, Typeset`update$$ = 0, 
+    Typeset`initDone$$, Typeset`skipInitDone$$ = True}, 
+    DynamicBox[Manipulate`ManipulateBoxes[
+     1, StandardForm, 
+      "Variables" :> {$CellContext`InterestRate$$ = 
+        0.05, $CellContext`StockPrice$$ = 100, $CellContext`StrikePrice$$ = 
+        100, $CellContext`t$$ = 0, $CellContext`T$$ = 
+        0.25, $CellContext`Volatility$$ = 0.25}, "ControllerVariables" :> {}, 
+      "OtherVariables" :> {
+       Typeset`show$$, Typeset`bookmarkList$$, Typeset`bookmarkMode$$, 
+        Typeset`animator$$, Typeset`animvar$$, Typeset`name$$, 
+        Typeset`specs$$, Typeset`size$$, Typeset`update$$, Typeset`initDone$$,
+         Typeset`skipInitDone$$}, "Body" :> Grid[{{"European Call", 
+          Evaluate[
+           $CellContext`EuropeanCallF[$CellContext`Volatility$$, \
+$CellContext`T$$, $CellContext`t$$, $CellContext`StockPrice$$, \
+$CellContext`StrikePrice$$, $CellContext`InterestRate$$]]}, {"European Put", 
+          Evaluate[
+           $CellContext`EuropeanPutF[$CellContext`Volatility$$, \
+$CellContext`T$$, $CellContext`t$$, $CellContext`StockPrice$$, \
+$CellContext`StrikePrice$$, $CellContext`InterestRate$$]]}, {
+         "Delta of European Call", $CellContext`ecall = Evaluate[
+            $CellContext`ECallDeltaF[$CellContext`Volatility$$, \
+$CellContext`T$$, $CellContext`t$$, $CellContext`StockPrice$$, \
+$CellContext`StrikePrice$$, $CellContext`InterestRate$$]]}, {
+         "Delta of European Put", $CellContext`ecall - 1}}, Alignment -> 
+        Left], "Specifications" :> {{{$CellContext`StockPrice$$, 100, 
+          "Stock Price"}}, {{$CellContext`StrikePrice$$, 100, 
+          "Strike Price"}}, {{$CellContext`InterestRate$$, 0.05, 
+          "Interest Rate"}}, {{$CellContext`T$$, 0.25, 
+          "Maturity Period"}}, {{$CellContext`t$$, 0, 
+          "Current Period"}}, {{$CellContext`Volatility$$, 0.25, 
+          "Volatility"}}}, "Options" :> {BaseStyle -> (FontSize -> 16)}, 
+      "DefaultOptions" :> {}],
+     ImageSizeCache->{375., {131., 138.}},
+     SingleEvaluation->True],
+    Deinitialization:>None,
+    DynamicModuleValues:>{},
+    SynchronousInitialization->True,
+    UndoTrackedVariables:>{Typeset`show$$, Typeset`bookmarkMode$$},
+    UnsavedVariables:>{Typeset`initDone$$},
+    UntrackedVariables:>{Typeset`size$$}], "Manipulate",
+   Deployed->True,
+   StripOnInput->False,
+   FontSize->16],
+  Manipulate`InterpretManipulate[1]]], "Output",
+ CellChangeTimes->{3.658072355053545*^9}]
+}, Open  ]]
+},
+WindowSize->{1588, 738},
+WindowMargins->{{3566, Automatic}, {-80, Automatic}},
+FrontEndVersion->"10.1 for Microsoft Windows (64-bit) (March 23, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 6895, 176, 428, "Input"],
+Cell[7478, 200, 3347, 62, 319, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
